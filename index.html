@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autorización de Circulación - Gusanitos de La Calle</title>
+    <link href="style.css" rel="stylesheet"> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="https://via.placeholder.com/150?text=ACT+Logo" alt="ACT Logo" class="logo">
+            <h1>AUTORIZACIÓN</h1>
+            <h2>AUTORIZACIÓN DE CIRCULACIÓN</h2>
+            <p>No. ACT-EP-DPOTTM-016-2025-ACVIL</p>
+        </div>
+
+        <div id="input-section">
+            <h3>Ingrese los Datos del Propietario</h3>
+            <div class="form-group">
+                <input type="text" id="placa-input" placeholder="Placa (Ej: OBM0979)" oninput="this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '')" maxlength="7">
+            </div>
+            <div class="form-group">
+                <input type="text" id="nombre-input" placeholder="Nombre" oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '')">
+            </div>
+            <div class="form-group">
+                <input type="text" id="apellido-input" placeholder="Apellido" oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '')">
+            </div>
+            <div class="form-group">
+                <input type="text" id="cedula-input" placeholder="Cédula (10 dígitos)" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="10">
+            </div>
+            <button onclick="validateAndGenerate()">Validar y Generar QR</button>
+            <div id="result-message" class="error"></div>
+        </div>
+
+        <div id="qr-container">
+            <h3>Código QR Generado</h3>
+            <div id="qrcode"></div>
+            <button class="download-btn" onclick="downloadQR()">Descargar QR</button>
+        </div>
+
+        <div id="auth-details">
+            <h3>Detalles de la Autorización</h3>
+            <p><strong>Documento:</strong> No. ACT-EP-DPOTTM-016-2025-ACVIL</p>
+            <p><strong>Placa:</strong> <span id="auth-placa"></span></p>
+            <p><strong>Propietario:</strong> <span id="auth-nombre"></span> <span id="auth-apellido"></span></p>
+            <p><strong>Cédula:</strong> <span id="auth-cedula"></span></p>
+            <p><strong>Validez:</strong> 1 al 30 de septiembre de 2025</p>
+            <p><strong>Ruta Autorizada:</strong> Av. Galo Plaza Lasso → Av. Cristóbal Colón (derecha) → Av. Julio Arosemena Monroy/Babahoyo → Av. Galo Plaza Lasso</p>
+            <p><strong>Horario:</strong> 14:00 a 23:00</p>
+            <p><strong>Representante:</strong> Marco Ramiro Vargas Tixe</p>
+            <p><strong>Condiciones:</strong> Los conductores deberán portar la autorización. Sanciones según Ordenanza GADMM #38-2023 y #40-2023.</p>
+            
+            <button class="download-btn" onclick="generatePDF()">Generar PDF de Autorización</button>
+        </div>
+
+        <div class="footer">
+            <p>EMOVIM-EP | Av. Simón Bolívar y Juan Montalvo | Milagro, Ecuador | genercia@emovim-ep.gob.ec</p>
+            <p id="current-date">Fecha: 24 de septiembre de 2025, 15:54</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
