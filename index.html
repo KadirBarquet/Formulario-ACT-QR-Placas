@@ -18,16 +18,32 @@
         <div id="input-section">
             <h3>Ingrese los Datos del Propietario</h3>
             <div class="form-group">
-                <input type="text" id="placa-input" placeholder="Placa (Ej: OBM0979)" oninput="this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '')" maxlength="7">
+                <label for="placa-input">Placa</label>
+                <textarea id="placa-input" placeholder="Ej: OBM0979, ABC1234" rows="2" style="width:100%;resize:vertical;"></textarea>
             </div>
             <div class="form-group">
-                <input type="text" id="nombre-input" placeholder="Nombre" oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '')">
+                <label for="nombre-input">Nombres</label>
+                <input type="text" id="nombre-input" placeholder="Nombres" oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '')">
             </div>
             <div class="form-group">
-                <input type="text" id="apellido-input" placeholder="Apellido" oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '')">
+                <label for="apellido-input">Apellidos</label>
+                <input type="text" id="apellido-input" placeholder="Apellidos" oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '')">
             </div>
             <div class="form-group">
-                <input type="text" id="cedula-input" placeholder="Cédula (10 dígitos)" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="10">
+                <label for="cedula-input">Cédula (10 dígitos)</label>
+                <input type="text" id="cedula-input" placeholder="Cédula" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="10">
+            </div>
+            <div class="form-group">
+                <label for="ruc-input">RUC (13 dígitos)</label>
+                <input type="text" id="ruc-input" placeholder="RUC" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="13">
+            </div>
+            <div class="form-group">
+                <label for="autorizacion-input">Número de Autorización</label>
+                <input type="text" id="autorizacion-input" placeholder="Número de Autorización" maxlength="30">
+            </div>
+            <div class="form-group">
+                <label for="caducidad-input">Fecha de Caducidad</label>
+                <input type="date" id="caducidad-input">
             </div>
             <button onclick="validateAndGenerate()">Validar y Generar QR</button>
             <div id="result-message" class="error"></div>
@@ -41,10 +57,13 @@
 
         <div id="auth-details">
             <h3>Detalles de la Autorización</h3>
-            <p><strong>Documento:</strong> No. ACT-EP-DPOTTM-016-2025-ACVIL</p>
+            <p><strong>Documento:</strong> <span id="auth-autorizacion"></span></p>
             <p><strong>Placa:</strong> <span id="auth-placa"></span></p>
-            <p><strong>Propietario:</strong> <span id="auth-nombre"></span> <span id="auth-apellido"></span></p>
+            <p><strong>Nombres:</strong> <span id="auth-nombre"></span></p>
+            <p><strong>Apellidos:</strong> <span id="auth-apellido"></span></p>
             <p><strong>Cédula:</strong> <span id="auth-cedula"></span></p>
+            <p><strong>RUC:</strong> <span id="auth-ruc"></span></p>
+            <p><strong>Fecha de Caducidad:</strong> <span id="auth-caducidad"></span></p>
             <p><strong>Validez:</strong> 1 al 30 de septiembre de 2025</p>
             <p><strong>Ruta Autorizada:</strong> Av. Galo Plaza Lasso → Av. Cristóbal Colón (derecha) → Av. Julio Arosemena Monroy/Babahoyo → Av. Galo Plaza Lasso</p>
             <p><strong>Horario:</strong> 14:00 a 23:00</p>

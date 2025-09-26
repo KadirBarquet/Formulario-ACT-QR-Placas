@@ -1,3 +1,19 @@
+input[type="date"] {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  background-color: #f8f9fa;
+  color: #333;
+  font-size: 1em;
+  transition: border-color 0.2s;
+}
+input[type="date"]:focus {
+  border-color: #007bff;
+  outline: none;
+}
 body {
   font-family: Arial, sans-serif;
   background-color: #f4f4f4;

@@ -6,6 +6,9 @@ function validateAndGenerate() {
     const nombre = document.getElementById('nombre-input').value.trim();
     const apellido = document.getElementById('apellido-input').value.trim();
     const cedula = document.getElementById('cedula-input').value.trim();
+    const ruc = document.getElementById('ruc-input').value.trim();
+    const autorizacion = document.getElementById('autorizacion-input').value.trim();
+    const caducidad = document.getElementById('caducidad-input').value;
     const message = document.getElementById('result-message');
     const qrContainer = document.getElementById('qr-container');
     const authDetails = document.getElementById('auth-details');
@@ -15,23 +18,23 @@ function validateAndGenerate() {
     qrContainer.style.display = 'none';
     authDetails.style.display = 'none';
 
-    if (!placa || !nombre || !apellido || !cedula) {
-        message.textContent = 'Por favor, complete todos los campos.';
+    if (!nombre || !apellido || !cedula || !ruc || !autorizacion || !caducidad) {
+        message.textContent = 'Por favor, complete todos los campos excepto placa.';
         message.className = 'error';
         return;
     }
 
-    // Validación de formato de placa ecuatoriana
-    const placaRegex = /^[A-Z]{3}[0-9]{4}$/;
-    if (!placaRegex.test(placa)) {
-        message.textContent = 'La placa debe tener el formato ABC1234 (3 letras y 4 números).';
-        message.className = 'error';
-        return;
-    }
+    // Sin validación de formato para placa, se permite cualquier texto
 
     // Validación de cédula ecuatoriana (10 dígitos)
     if (cedula.length !== 10) {
         message.textContent = 'La cédula debe tener exactamente 10 dígitos.';
+        message.className = 'error';
+        return;
+    }
+    // Validación de RUC (13 dígitos)
+    if (ruc.length !== 13) {
+        message.textContent = 'El RUC debe tener exactamente 13 dígitos.';
         message.className = 'error';
         return;
     }
@@ -46,12 +49,15 @@ function validateAndGenerate() {
     // Simulación de validación exitosa (modo de prueba)
     // En lugar de hacer fetch a una API inexistente, validamos localmente
     currentPlaca = placa;
-    currentData = { placa, nombre, apellido, cedula };
+    currentData = { placa, nombre, apellido, cedula, ruc, autorizacion, caducidad };
 
     document.getElementById('auth-placa').textContent = placa;
     document.getElementById('auth-nombre').textContent = nombre;
     document.getElementById('auth-apellido').textContent = apellido;
     document.getElementById('auth-cedula').textContent = cedula;
+    document.getElementById('auth-ruc').textContent = ruc;
+    document.getElementById('auth-autorizacion').textContent = autorizacion;
+    document.getElementById('auth-caducidad').textContent = caducidad;
 
     message.textContent = '✅ Placa autorizada. Generando QR...';
     message.className = 'success';
@@ -77,8 +83,8 @@ function generateQR() {
 
     // Reemplaza localhost y 127.0.0.1 por tu IP local
     let baseUrl = window.location.href.split('?')[0];
-    baseUrl = baseUrl.replace('localhost', '192.168.137.86').replace('127.0.0.1', '192.168.137.86');
-    const authUrl = `${baseUrl}?placa=${encodeURIComponent(currentPlaca)}&nombre=${encodeURIComponent(currentData.nombre)}&apellido=${encodeURIComponent(currentData.apellido)}&cedula=${encodeURIComponent(currentData.cedula)}`;
+    baseUrl = baseUrl.replace('localhost', '192.168.0.106').replace('127.0.0.1', '192.168.0.106');
+    const authUrl = `${baseUrl}?placa=${encodeURIComponent(currentPlaca)}&nombre=${encodeURIComponent(currentData.nombre)}&apellido=${encodeURIComponent(currentData.apellido)}&cedula=${encodeURIComponent(currentData.cedula)}&ruc=${encodeURIComponent(currentData.ruc)}&autorizacion=${encodeURIComponent(currentData.autorizacion)}&caducidad=${encodeURIComponent(currentData.caducidad)}`;
 
     new QRCode(qrContainer, {
         text: authUrl,
@@ -150,7 +156,9 @@ function generatePDF() {
     doc.setFont("helvetica", "normal");
     doc.text(`• Placa: ${currentData.placa}`, 25, y);
     y += 8;
-    doc.text(`• Propietario: ${currentData.nombre} ${currentData.apellido}`, 25, y);
+    doc.text(`• Nombres: ${currentData.nombre}`, 25, y);
+    y += 8;
+    doc.text(`• Apellidos: ${currentData.apellido}`, 25, y);
     y += 8;
     doc.text(`• Cédula: ${currentData.cedula}`, 25, y);
     y += 8;
@@ -206,10 +214,13 @@ window.onload = function () {
     const nombre = urlParams.get('nombre');
     const apellido = urlParams.get('apellido');
     const cedula = urlParams.get('cedula');
+    const ruc = urlParams.get('ruc');
+    const autorizacion = urlParams.get('autorizacion');
+    const caducidad = urlParams.get('caducidad');
 
-    if (placa && nombre && apellido && cedula) {
+    if (placa && nombre && apellido && cedula && ruc && autorizacion && caducidad) {
         // Configurar datos para vista de QR escaneado
-        currentData = { placa, nombre, apellido, cedula };
+        currentData = { placa, nombre, apellido, cedula, ruc, autorizacion, caducidad };
         currentPlaca = placa;
 
         // Mostrar solo los detalles y el botón para PDF
@@ -222,6 +233,9 @@ window.onload = function () {
         document.getElementById('auth-nombre').textContent = nombre;
         document.getElementById('auth-apellido').textContent = apellido;
         document.getElementById('auth-cedula').textContent = cedula;
+        document.getElementById('auth-ruc').textContent = ruc;
+        document.getElementById('auth-autorizacion').textContent = autorizacion;
+        document.getElementById('auth-caducidad').textContent = caducidad;
 
         document.getElementById('result-message').textContent = `✅ Autorización válida para placa: ${placa}`;
         document.getElementById('result-message').className = 'success';
