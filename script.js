@@ -51,14 +51,6 @@ function validateAndGenerate() {
     qrContainer.style.display = 'none';
     authDetails.style.display = 'none';
 
-    // Validación para el número de autorización
-    const autorizacionRegex = /^No\. ACT-EP-DPOTTTM-\d{3}-\d{4}-ACVIL$/;
-    if (!autorizacionRegex.test(autorizacion)) {
-        message.textContent = 'El número de autorización no es válido. Ejemplo: No. ACT-EP-DPOTTTM-016-2025-ACVIL';
-        message.className = 'error';
-        return;
-    }
-
     if (!nombre || !apellido || !autorizacion || !caducidad || !tipoID ||
         (tipoID === 'cedula' && !cedula) ||
         (tipoID === 'ruc' && !ruc) ||
@@ -286,4 +278,3 @@ window.onload = function () {
     const fechaActual = now.toLocaleDateString('es-EC') + ', ' + now.toLocaleTimeString('es-EC', { hour: '2-digit', minute: '2-digit' });
     document.getElementById('current-date').textContent = `Fecha: ${fechaActual}`;
 };
-
