@@ -112,6 +112,7 @@ img.document {
   color: #666;
   margin-top: 20px;
 }
+<<<<<<< HEAD
 select {
   width: 100%;
   padding: 10px;
@@ -132,3 +133,5 @@ select:focus {
   border-color: #007bff;
   outline: none;
 }
+=======
+>>>>>>> c0e6bf26aa503f04c036ee9fdd8b8faac0f73109

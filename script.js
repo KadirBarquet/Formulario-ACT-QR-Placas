@@ -1,17 +1,23 @@
 let currentPlaca = '';
 let currentData = {};
 
+<<<<<<< HEAD
 function toggleIDInput() {
     const tipo = document.getElementById('tipo-id').value;
     document.getElementById('cedula-group').style.display = (tipo === 'cedula' || tipo === 'ambos') ? 'block' : 'none';
     document.getElementById('ruc-group').style.display = (tipo === 'ruc' || tipo === 'ambos') ? 'block' : 'none';
 }
 
+=======
+>>>>>>> c0e6bf26aa503f04c036ee9fdd8b8faac0f73109
 function validateAndGenerate() {
     const placa = document.getElementById('placa-input').value.trim();
     const nombre = document.getElementById('nombre-input').value.trim();
     const apellido = document.getElementById('apellido-input').value.trim();
+<<<<<<< HEAD
     const tipoID = document.getElementById('tipo-id').value;
+=======
+>>>>>>> c0e6bf26aa503f04c036ee9fdd8b8faac0f73109
     const cedula = document.getElementById('cedula-input').value.trim();
     const ruc = document.getElementById('ruc-input').value.trim();
     const autorizacion = document.getElementById('autorizacion-input').value.trim();
@@ -25,12 +31,18 @@ function validateAndGenerate() {
     qrContainer.style.display = 'none';
     authDetails.style.display = 'none';
 
+<<<<<<< HEAD
     if (!nombre || !apellido || !autorizacion || !caducidad || !tipoID) {
         message.textContent = 'Por favor, complete todos los campos y seleccione tipo de identificación.';
+=======
+    if (!nombre || !apellido || !cedula || !ruc || !autorizacion || !caducidad) {
+        message.textContent = 'Por favor, complete todos los campos excepto placa.';
+>>>>>>> c0e6bf26aa503f04c036ee9fdd8b8faac0f73109
         message.className = 'error';
         return;
     }
 
+<<<<<<< HEAD
     if (tipoID === 'cedula') {
         if (!cedula) {
             message.textContent = 'Ingrese la cédula.';
@@ -84,12 +96,45 @@ function validateAndGenerate() {
     // Simulación de validación exitosa (modo de prueba)
     currentPlaca = placa;
     currentData = { placa, nombre, apellido, cedula: tipoID !== 'ruc' ? cedula : '', ruc: tipoID !== 'cedula' ? ruc : '', autorizacion, caducidad };
+=======
+    // Sin validación de formato para placa, se permite cualquier texto
+
+    // Validación de cédula ecuatoriana (10 dígitos)
+    if (cedula.length !== 10) {
+        message.textContent = 'La cédula debe tener exactamente 10 dígitos.';
+        message.className = 'error';
+        return;
+    }
+    // Validación de RUC (13 dígitos)
+    if (ruc.length !== 13) {
+        message.textContent = 'El RUC debe tener exactamente 13 dígitos.';
+        message.className = 'error';
+        return;
+    }
+
+    // Validación básica de cédula ecuatoriana
+    if (!validateEcuadorianID(cedula)) {
+        message.textContent = 'La cédula ingresada no es válida.';
+        message.className = 'error';
+        return;
+    }
+
+    // Simulación de validación exitosa (modo de prueba)
+    // En lugar de hacer fetch a una API inexistente, validamos localmente
+    currentPlaca = placa;
+    currentData = { placa, nombre, apellido, cedula, ruc, autorizacion, caducidad };
+>>>>>>> c0e6bf26aa503f04c036ee9fdd8b8faac0f73109
 
     document.getElementById('auth-placa').textContent = placa;
     document.getElementById('auth-nombre').textContent = nombre;
     document.getElementById('auth-apellido').textContent = apellido;
+<<<<<<< HEAD
     document.getElementById('auth-cedula').textContent = tipoID !== 'ruc' ? cedula : '';
     document.getElementById('auth-ruc').textContent = tipoID !== 'cedula' ? ruc : '';
+=======
+    document.getElementById('auth-cedula').textContent = cedula;
+    document.getElementById('auth-ruc').textContent = ruc;
+>>>>>>> c0e6bf26aa503f04c036ee9fdd8b8faac0f73109
     document.getElementById('auth-autorizacion').textContent = autorizacion;
     document.getElementById('auth-caducidad').textContent = caducidad;
 
