@@ -10,10 +10,12 @@ input[type="date"] {
   font-size: 1em;
   transition: border-color 0.2s;
 }
+
 input[type="date"]:focus {
   border-color: #007bff;
   outline: none;
 }
+
 body {
   font-family: Arial, sans-serif;
   background-color: #f4f4f4;
@@ -21,6 +23,7 @@ body {
   padding: 20px;
   color: #333;
 }
+
 .container {
   max-width: 800px;
   margin: 0 auto;
@@ -30,25 +33,30 @@ body {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-top: 5px solid #004d99;
 }
+
 .header {
   text-align: center;
   margin-bottom: 20px;
 }
+
 .header img {
   max-width: 150px;
 }
-h1,
-h2 {
+
+h1, h2 {
   text-align: center;
   color: #004d99;
   margin: 0;
 }
+
 h2 {
   font-size: 1.2em;
 }
+
 .form-group {
   margin-bottom: 15px;
 }
+
 input[type="text"] {
   width: 100%;
   padding: 10px;
@@ -57,6 +65,7 @@ input[type="text"] {
   border-radius: 4px;
   box-sizing: border-box;
 }
+
 button {
   width: 100%;
   padding: 10px;
@@ -67,24 +76,30 @@ button {
   cursor: pointer;
   margin-bottom: 10px;
 }
+
 button:hover {
   background-color: #0056b3;
 }
+
 #qr-container {
   text-align: center;
   margin-top: 20px;
   display: none;
 }
+
 #result-message {
   text-align: center;
   margin: 10px 0;
 }
+
 .error {
   color: red;
 }
+
 .success {
   color: green;
 }
+
 #auth-details {
   margin-top: 20px;
   padding: 20px;
@@ -92,13 +107,16 @@ button:hover {
   border-radius: 4px;
   display: none;
 }
+
 .download-btn {
   background-color: #28a745;
   margin-top: 10px;
 }
+
 .download-btn:hover {
   background-color: #218838;
 }
+
 img.document {
   max-width: 100%;
   height: auto;
@@ -106,12 +124,14 @@ img.document {
   border: 1px solid #ddd;
   border-radius: 4px;
 }
+
 .footer {
   text-align: center;
   font-size: 0.8em;
   color: #666;
   margin-top: 20px;
 }
+
 select {
   width: 100%;
   padding: 10px;
@@ -124,10 +144,12 @@ select {
   font-size: 1em;
   transition: border-color 0.2s;
 }
+
 select:focus {
   border-color: #007bff;
   outline: none;
 }
+
 /* Opcional: mejora visual para los labels de inputs dinámicos */
 #input-id-container label {
   display: block;
@@ -135,4 +157,70 @@ select:focus {
   margin-bottom: 3px;
   color: #004d99;
   font-weight: bold;
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 600px) {
+  .container {
+    max-width: 100%;
+    padding: 10px;
+    border-radius: 0;
+    box-shadow: none;
+    border-top-width: 3px;
+  }
+
+  .header img {
+    max-width: 100px;
+  }
+
+  h1, h2 {
+    font-size: 1em;
+    margin-bottom: 10px;
+  }
+
+  .form-group {
+    margin-bottom: 10px;
+  }
+
+  input[type="text"],
+  input[type="date"],
+  select,
+  button {
+    font-size: 1em;
+    padding: 8px;
+    margin: 4px 0;
+  }
+
+  #auth-details {
+    padding: 10px;
+    font-size: 0.95em;
+  }
+
+  .footer {
+    font-size: 0.7em;
+    margin-top: 10px;
+  }
+
+  #qr-container {
+    margin-top: 10px;
+  }
+}
+
+/* Mejoras para pantallas muy pequeñas */
+@media (max-width: 400px) {
+  .container {
+    padding: 5px;
+  }
+
+  h1, h2 {
+    font-size: 0.9em;
+  }
+
+  input[type="text"],
+  input[type="date"],
+  select,
+  button {
+    font-size: 0.95em;
+    padding: 6px;
+  }
 }
