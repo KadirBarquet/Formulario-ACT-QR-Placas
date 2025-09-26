@@ -19,7 +19,11 @@
             <h3>Ingrese los Datos del Propietario</h3>
             <div class="form-group">
                 <label for="placa-input">Placa</label>
+<<<<<<< HEAD
+                <input type="text" id="placa-input" placeholder="Ej: OBM0979, ABC1234">
+=======
                 <textarea id="placa-input" placeholder="Ej: OBM0979, ABC1234" rows="2" style="width:100%;resize:vertical;"></textarea>
+>>>>>>> c0e6bf26aa503f04c036ee9fdd8b8faac0f73109
             </div>
             <div class="form-group">
                 <label for="nombre-input">Nombres</label>
@@ -29,16 +33,44 @@
                 <label for="apellido-input">Apellidos</label>
                 <input type="text" id="apellido-input" placeholder="Apellidos" oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '')">
             </div>
+<<<<<<< HEAD
             <div>
                 <label for="tipo-id">Tipo de identificación</label>
                 <select id="tipo-id" onchange="mostrarInputID()">
+=======
+            <div class="form-group">
+<<<<<<< HEAD
+                <label for="tipo-id">Tipo de Identificación</label>
+                <select id="tipo-id" onchange="toggleIDInput()">
+>>>>>>> 88c9f5eaed5c05485a48625413aac8eeca746f34
                     <option value="">Seleccione...</option>
                     <option value="cedula">Cédula</option>
                     <option value="ruc">RUC</option>
                     <option value="ambos">Ambos</option>
+<<<<<<< HEAD
                 </select> 
             </div> 
             <div class="form-group" id="input-id-container"></div>
+=======
+                </select>
+            </div>
+            <div class="form-group" id="cedula-group" style="display:none;">
+                <label for="cedula-input">Cédula (10 dígitos)</label>
+                <input type="text" id="cedula-input" placeholder="Cédula" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+            </div>
+            <div class="form-group" id="ruc-group" style="display:none;">
+                <label for="ruc-input">RUC (13 dígitos)</label>
+                <input type="text" id="ruc-input" placeholder="RUC" maxlength="13" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+=======
+                <label for="cedula-input">Cédula (10 dígitos)</label>
+                <input type="text" id="cedula-input" placeholder="Cédula" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="10">
+            </div>
+            <div class="form-group">
+                <label for="ruc-input">RUC (13 dígitos)</label>
+                <input type="text" id="ruc-input" placeholder="RUC" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="13">
+>>>>>>> c0e6bf26aa503f04c036ee9fdd8b8faac0f73109
+            </div>
+>>>>>>> 88c9f5eaed5c05485a48625413aac8eeca746f34
             <div class="form-group">
                 <label for="autorizacion-input">Número de Autorización</label>
                 <input type="text" id="autorizacion-input" placeholder="Número de Autorización" maxlength="30">

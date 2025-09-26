@@ -112,6 +112,10 @@ img.document {
   color: #666;
   margin-top: 20px;
 }
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 88c9f5eaed5c05485a48625413aac8eeca746f34
 select {
   width: 100%;
   padding: 10px;
@@ -123,11 +127,19 @@ select {
   color: #333;
   font-size: 1em;
   transition: border-color 0.2s;
+<<<<<<< HEAD
+=======
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+>>>>>>> 88c9f5eaed5c05485a48625413aac8eeca746f34
 }
 select:focus {
   border-color: #007bff;
   outline: none;
 }
+<<<<<<< HEAD
 /* Opcional: mejora visual para los labels de inputs dinámicos */
 #input-id-container label {
   display: block;
@@ -136,3 +148,7 @@ select:focus {
   color: #004d99;
   font-weight: bold;
 }
+=======
+=======
+>>>>>>> c0e6bf26aa503f04c036ee9fdd8b8faac0f73109
+>>>>>>> 88c9f5eaed5c05485a48625413aac8eeca746f34
