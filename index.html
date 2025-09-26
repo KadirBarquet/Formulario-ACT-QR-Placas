@@ -29,14 +29,16 @@
                 <label for="apellido-input">Apellidos</label>
                 <input type="text" id="apellido-input" placeholder="Apellidos" oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '')">
             </div>
-            <div class="form-group">
-                <label for="cedula-input">Cédula (10 dígitos)</label>
-                <input type="text" id="cedula-input" placeholder="Cédula" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="10">
-            </div>
-            <div class="form-group">
-                <label for="ruc-input">RUC (13 dígitos)</label>
-                <input type="text" id="ruc-input" placeholder="RUC" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="13">
-            </div>
+            <div>
+                <label for="tipo-id">Tipo de identificación</label>
+                <select id="tipo-id" onchange="mostrarInputID()">
+                    <option value="">Seleccione...</option>
+                    <option value="cedula">Cédula</option>
+                    <option value="ruc">RUC</option>
+                    <option value="ambos">Ambos</option>
+                </select> 
+            </div> 
+            <div class="form-group" id="input-id-container"></div>
             <div class="form-group">
                 <label for="autorizacion-input">Número de Autorización</label>
                 <input type="text" id="autorizacion-input" placeholder="Número de Autorización" maxlength="30">

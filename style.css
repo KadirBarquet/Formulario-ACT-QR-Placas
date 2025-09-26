@@ -112,3 +112,27 @@ img.document {
   color: #666;
   margin-top: 20px;
 }
+select {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  background-color: #f8f9fa;
+  color: #333;
+  font-size: 1em;
+  transition: border-color 0.2s;
+}
+select:focus {
+  border-color: #007bff;
+  outline: none;
+}
+/* Opcional: mejora visual para los labels de inputs dinámicos */
+#input-id-container label {
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 3px;
+  color: #004d99;
+  font-weight: bold;
+}
