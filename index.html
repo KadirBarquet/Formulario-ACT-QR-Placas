@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autorización de Circulación - Gusanitos de La Calle</title>
+    <link href="style.css" rel="stylesheet"> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="img/Logo_ACT.png" alt="ACT Logo" class="logo">
+            <h1>AUTORIZACIÓN</h1>
+        </div>
+
+        <div id="input-section">
+            <h3>Ingrese los Datos del Propietario</h3>
+            <div class="form-group">
+                <label for="placa-input">Placa</label>
+                <input type="text" id="placa-input" placeholder="Ej: OBM0979, ABC1234">
+            </div>
+            <div class="form-group">
+                <label for="nombre-input">Nombres</label>
+                <input type="text" id="nombre-input" placeholder="Nombres" oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '')">
+            </div>
+            <div class="form-group">
+                <label for="apellido-input">Apellidos</label>
+                <input type="text" id="apellido-input" placeholder="Apellidos" oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '')">
+            </div>
+            <div class="form-group">
+                <label for="tipo-id">Tipo de Identificación</label>
+                <select id="tipo-id" onchange="toggleIDInput()">
+                    <option value="">Seleccione...</option>
+                    <option value="cedula">Cédula</option>
+                    <option value="ruc">RUC</option>
+                    <option value="ambos">Ambos</option>
+                </select>
+            </div>
+            <div class="form-group" id="cedula-group" style="display:none;">
+                <label for="cedula-input">Cédula (10 dígitos)</label>
+                <input type="text" id="cedula-input" placeholder="Cédula" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+            </div>
+            <div class="form-group" id="ruc-group" style="display:none;">
+                <label for="ruc-input">RUC (13 dígitos)</label>
+                <input type="text" id="ruc-input" placeholder="RUC" maxlength="13" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+            </div>
+            <div class="form-group">
+                <label for="autorizacion-input">Número de Autorización</label>
+                <input type="text" id="autorizacion-input" placeholder="Número de Autorización" maxlength="30">
+            </div>
+            <div class="form-group">
+                <label for="caducidad-input">Fecha de Caducidad</label>
+                <input type="date" id="caducidad-input">
+            </div>
+            <button onclick="validateAndGenerate()">Validar y Generar QR</button>
+            <div id="result-message" class="error"></div>
+        </div>
+
+        <div id="qr-container">
+            <h3>Código QR Generado</h3>
+            <div id="qrcode"></div>
+            <button class="download-btn" onclick="downloadQR()">Descargar QR</button>
+        </div>
+
+        <div id="auth-details">
+            <h3>Detalles de la Autorización</h3>
+            <p><strong>Documento:</strong> <span id="auth-autorizacion"></span></p>
+            <p><strong>Placa:</strong> <span id="auth-placa"></span></p>
+            <p><strong>Nombres:</strong> <span id="auth-nombre"></span></p>
+            <p><strong>Apellidos:</strong> <span id="auth-apellido"></span></p>
+            <p><strong>Cédula:</strong> <span id="auth-cedula"></span></p>
+            <p><strong>RUC:</strong> <span id="auth-ruc"></span></p>
+            <p><strong>Fecha de Caducidad:</strong> <span id="auth-caducidad"></span></p>
+            <p><strong>Validez:</strong> 1 al 30 de septiembre de 2025</p>
+            <p><strong>Ruta Autorizada:</strong> Av. Galo Plaza Lasso → Av. Cristóbal Colón (derecha) → Av. Julio Arosemena Monroy/Babahoyo → Av. Galo Plaza Lasso</p>
+            <p><strong>Horario:</strong> 14:00 a 23:00</p>
+            <p><strong>Representante:</strong> Marco Ramiro Vargas Tixe</p>
+            <p><strong>Condiciones:</strong> Los conductores deberán portar la autorización. Sanciones según Ordenanza GADMM #38-2023 y #40-2023.</p>
+            
+            <button class="download-btn" onclick="generatePDF()">Generar PDF de Autorización</button>
+        </div>
+
+        <div class="footer">
+            <p>EMOVIM-EP | Av. Simón Bolívar y Juan Montalvo | Milagro, Ecuador | genercia@emovim-ep.gob.ec</p>
+            <p id="current-date">Fecha: 24 de septiembre de 2025, 15:54</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
