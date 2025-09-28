@@ -27,6 +27,17 @@ function mostrarInputID() {
 
 function validateAndGenerate() {
     const placa = document.getElementById('placa-input').value.trim();
+    // Permitir varias placas separadas por guion, con o sin espacios
+    const placas = placa.split('-').map(p => p.trim()).filter(p => p.length > 0);
+    const placaRegex = /^[A-Z]{3}\d{3,4}$/;
+    for (let p of placas) {
+        if (!placaRegex.test(p)) {
+            message.textContent = 'Cada placa debe tener el formato correcto. Ejemplo: DFS3322-KFD3432 o DFS3322 - KFD3432';
+            message.className = 'error';
+            return;
+        }
+    }
+
     const nombre = document.getElementById('nombre-input').value.trim();
     const apellido = document.getElementById('apellido-input').value.trim();
     const tipoID = document.getElementById('tipo-id').value;
@@ -80,10 +91,11 @@ function validateAndGenerate() {
         }
     }
 
-    currentPlaca = placa;
-    currentData = { placa, nombre, apellido, cedula, ruc, autorizacion, caducidad };
+    // Guarda todas las placas como una cadena separada por guion y espacio
+    currentPlaca = placas.join(' - ');
+    currentData = { placa: currentPlaca, nombre, apellido, cedula, ruc, autorizacion, caducidad };
 
-    document.getElementById('auth-placa').textContent = placa;
+    document.getElementById('auth-placa').textContent = currentPlaca;
     document.getElementById('auth-nombre').textContent = nombre;
     document.getElementById('auth-apellido').textContent = apellido;
     document.getElementById('auth-cedula').textContent = cedula;
@@ -91,10 +103,9 @@ function validateAndGenerate() {
     document.getElementById('auth-autorizacion').textContent = autorizacion;
     document.getElementById('auth-caducidad').textContent = caducidad;
 
-    message.textContent = '✅ Placa autorizada. Generando QR...';
+    message.textContent = '✅ Placa(s) autorizada(s). Generando QR...';
     message.className = 'success';
 
-    // Simular un pequeño delay como si fuera una API real
     setTimeout(() => {
         generateQR();
         authDetails.style.display = 'block';
@@ -115,7 +126,7 @@ function generateQR() {
 
     // Reemplaza localhost y 127.0.0.1 por tu IP local
     let baseUrl = window.location.href.split('?')[0];
-    baseUrl = baseUrl.replace('localhost', '192.168.137.86').replace('127.0.0.1', '192.168.137.86');
+    baseUrl = baseUrl.replace('localhost', '192.168.0.101').replace('127.0.0.1', '192.168.0.101');
     const authUrl = `${baseUrl}?placa=${encodeURIComponent(currentPlaca)}&nombre=${encodeURIComponent(currentData.nombre)}&apellido=${encodeURIComponent(currentData.apellido)}&cedula=${encodeURIComponent(currentData.cedula)}&ruc=${encodeURIComponent(currentData.ruc)}&autorizacion=${encodeURIComponent(currentData.autorizacion)}&caducidad=${encodeURIComponent(currentData.caducidad)}`;
 
     new QRCode(qrContainer, {
