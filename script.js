@@ -109,6 +109,9 @@ function validateAndGenerate() {
     setTimeout(() => {
         generateQR();
         authDetails.style.display = 'block';
+        // Al mostrar el QR, borra el mensaje en verde
+        message.textContent = '';
+        message.className = '';
     }, 1000);
 }
 
