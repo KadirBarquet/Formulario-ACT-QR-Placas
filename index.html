@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Autorización de Circulación - Gusanitos de La Calle</title>
+    <title>Autorización - Gusanitos de La Calle</title>
     <link href="style.css" rel="stylesheet"> 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -23,11 +23,7 @@
             </div>
             <div class="form-group">
                 <label for="nombre-input">Nombres</label>
-                <input type="text" id="nombre-input" placeholder="Nombres" oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '')">
-            </div>
-            <div class="form-group">
-                <label for="apellido-input">Apellidos</label>
-                <input type="text" id="apellido-input" placeholder="Apellidos" oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '')">
+                <input type="text" id="nombre-input" placeholder="Nombres">
             </div>
             <div>
                 <label for="tipo-id">Tipo de identificación</label>
@@ -41,11 +37,11 @@
             <div class="form-group" id="input-id-container"></div>
             <div class="form-group">
                 <label for="autorizacion-input">Número de Autorización</label>
-                <input type="text" id="autorizacion-input" placeholder="Ej: No. ACT-EP-DPOTTTM-016-2025-ACVIL" maxlength="30">
+                <input type="text" id="autorizacion-input" placeholder="Ej: ACT-EP-DPOTTTM-016-2025-ACVIL" maxlength="30">
             </div>
             <div class="form-group">
-                <label for="caducidad-input">Fecha de Caducidad</label>
-                <input type="date" id="caducidad-input">
+                <label for="caducidad-input">Vigencia</label>
+                <input type="date" id="caducidad-input" min="">
             </div>
             <button onclick="validateAndGenerate()">Validar y Generar QR</button>
             <div id="result-message" class="error"></div>
@@ -62,15 +58,9 @@
             <p><strong>Documento:</strong> <span id="auth-autorizacion"></span></p>
             <p><strong>Placa:</strong> <span id="auth-placa"></span></p>
             <p><strong>Nombres:</strong> <span id="auth-nombre"></span></p>
-            <p><strong>Apellidos:</strong> <span id="auth-apellido"></span></p>
             <p><strong>Cédula:</strong> <span id="auth-cedula"></span></p>
             <p><strong>RUC:</strong> <span id="auth-ruc"></span></p>
-            <p><strong>Fecha de Caducidad:</strong> <span id="auth-caducidad"></span></p>
-            <p><strong>Validez:</strong> 1 al 30 de septiembre de 2025</p>
-            <p><strong>Ruta Autorizada:</strong> Av. Galo Plaza Lasso → Av. Cristóbal Colón (derecha) → Av. Julio Arosemena Monroy/Babahoyo → Av. Galo Plaza Lasso</p>
-            <p><strong>Horario:</strong> 14:00 a 23:00</p>
-            <p><strong>Representante:</strong> Marco Ramiro Vargas Tixe</p>
-            <p><strong>Condiciones:</strong> Los conductores deberán portar la autorización. Sanciones según Ordenanza GADMM #38-2023 y #40-2023.</p>
+            <p><strong>Vigencia:</strong> <span id="auth-caducidad"></span></p>
             
             <button class="download-btn" onclick="generatePDF()">Generar PDF de Autorización</button>
         </div>
