@@ -27,22 +27,11 @@ function mostrarInputID() {
 
 function validateAndGenerate() {
     const placa = document.getElementById('placa-input').value.trim();
-    // Permitir varias placas separadas por guion, con o sin espacios
-    const placas = placa.split('-').map(p => p.trim()).filter(p => p.length > 0);
-    const placaRegex = /^[A-Z]{3}\d{3,4}$/;
-    for (let p of placas) {
-        if (!placaRegex.test(p)) {
-            message.textContent = 'Cada placa debe tener el formato correcto. Ejemplo: DFS3322-KFD3432 o DFS3322 - KFD3432';
-            message.className = 'error';
-            return;
-        }
-    }
-
     const nombre = document.getElementById('nombre-input').value.trim();
-    const apellido = document.getElementById('apellido-input').value.trim();
     const tipoID = document.getElementById('tipo-id').value;
     let cedula = '';
     let ruc = '';
+    
     if (tipoID === 'cedula') {
         cedula = document.getElementById('cedula-input') ? document.getElementById('cedula-input').value.trim() : '';
     } else if (tipoID === 'ruc') {
@@ -51,6 +40,7 @@ function validateAndGenerate() {
         cedula = document.getElementById('cedula-input') ? document.getElementById('cedula-input').value.trim() : '';
         ruc = document.getElementById('ruc-input') ? document.getElementById('ruc-input').value.trim() : '';
     }
+    
     const autorizacion = document.getElementById('autorizacion-input').value.trim();
     const caducidad = document.getElementById('caducidad-input').value;
     const message = document.getElementById('result-message');
@@ -62,11 +52,22 @@ function validateAndGenerate() {
     qrContainer.style.display = 'none';
     authDetails.style.display = 'none';
 
-    if (!nombre || !apellido || !autorizacion || !caducidad || !tipoID ||
+    if (!nombre || !autorizacion || !caducidad || !tipoID ||
         (tipoID === 'cedula' && !cedula) ||
         (tipoID === 'ruc' && !ruc) ||
         (tipoID === 'ambos' && (!cedula || !ruc))) {
         message.textContent = 'Por favor, complete todos los campos requeridos.';
+        message.className = 'error';
+        return;
+    }
+
+    // Validar que la fecha no sea del pasado
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Establecer a inicio del día
+    const selectedDate = new Date(caducidad);
+    
+    if (selectedDate < today) {
+        message.textContent = 'La fecha de vigencia no puede ser anterior a la fecha actual.';
         message.className = 'error';
         return;
     }
@@ -91,27 +92,25 @@ function validateAndGenerate() {
         }
     }
 
-    // Guarda todas las placas como una cadena separada por guion y espacio
-    currentPlaca = placas.join(' - ');
-    currentData = { placa: currentPlaca, nombre, apellido, cedula, ruc, autorizacion, caducidad };
+    currentPlaca = placa;
+    currentData = { placa, nombre, cedula, ruc, autorizacion, caducidad };
 
-    document.getElementById('auth-placa').textContent = currentPlaca;
+    // Actualizar detalles mostrados
+    document.getElementById('auth-placa').textContent = placa;
     document.getElementById('auth-nombre').textContent = nombre;
-    document.getElementById('auth-apellido').textContent = apellido;
-    document.getElementById('auth-cedula').textContent = cedula;
-    document.getElementById('auth-ruc').textContent = ruc;
+    document.getElementById('auth-cedula').textContent = cedula || 'No disponible';
+    document.getElementById('auth-ruc').textContent = ruc || 'No disponible';
     document.getElementById('auth-autorizacion').textContent = autorizacion;
     document.getElementById('auth-caducidad').textContent = caducidad;
 
-    message.textContent = '✅ Placa(s) autorizada(s). Generando QR...';
+    message.textContent = '✅ Placa autorizada. Generando QR...';
     message.className = 'success';
 
+    // Simular un pequeño delay como si fuera una API real
     setTimeout(() => {
         generateQR();
         authDetails.style.display = 'block';
-        // Al mostrar el QR, borra el mensaje en verde
         message.textContent = '';
-        message.className = '';
     }, 1000);
 }
 
@@ -129,19 +128,46 @@ function generateQR() {
 
     // Reemplaza localhost y 127.0.0.1 por tu IP local
     let baseUrl = window.location.href.split('?')[0];
-    baseUrl = baseUrl.replace('localhost', '192.168.0.101').replace('127.0.0.1', '192.168.0.101');
-    const authUrl = `${baseUrl}?placa=${encodeURIComponent(currentPlaca)}&nombre=${encodeURIComponent(currentData.nombre)}&apellido=${encodeURIComponent(currentData.apellido)}&cedula=${encodeURIComponent(currentData.cedula)}&ruc=${encodeURIComponent(currentData.ruc)}&autorizacion=${encodeURIComponent(currentData.autorizacion)}&caducidad=${encodeURIComponent(currentData.caducidad)}`;
+    baseUrl = baseUrl.replace('localhost', '192.168.137.86').replace('127.0.0.1', '192.168.137.86');
+    
+    // Optimizar parámetros usando nombres más cortos
+    const params = new URLSearchParams();
+    params.append('p', currentPlaca); // p = placa
+    params.append('n', currentData.nombre); // n = nombre
+    params.append('a', currentData.autorizacion); // a = autorizacion
+    params.append('c', currentData.caducidad); // c = caducidad
+    
+    // Solo incluir cédula y RUC si tienen valor
+    if (currentData.cedula) {
+        params.append('ci', currentData.cedula); // ci = cedula
+    }
+    if (currentData.ruc) {
+        params.append('r', currentData.ruc); // r = ruc
+    }
+    
+    const authUrl = `${baseUrl}?${params.toString()}`;
 
-    new QRCode(qrContainer, {
-        text: authUrl,
-        width: 200,
-        height: 200,
-        colorDark: "#000000",
-        colorLight: "#ffffff",
-        correctLevel: QRCode.CorrectLevel.H
-    });
+    // Verificar longitud de la URL
+    if (authUrl.length > 1000) {
+        alert('Advertencia: Los datos son demasiado largos. Intente usar textos más cortos.');
+        return;
+    }
 
-    document.getElementById('qr-container').style.display = 'block';
+    try {
+        new QRCode(qrContainer, {
+            text: authUrl,
+            width: 200,
+            height: 200,
+            colorDark: "#000000",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+        });
+
+        document.getElementById('qr-container').style.display = 'block';
+    } catch (error) {
+        console.error('Error generando QR:', error);
+        alert('Error al generar el QR. Los datos pueden ser demasiado largos.');
+    }
 }
 
 function downloadQR() {
@@ -172,120 +198,120 @@ function generatePDF() {
     // Configurar fuente
     doc.setFont("helvetica");
 
-    // Encabezado
+    // Encabezado - Solo el título en azul
     doc.setFontSize(18);
-    doc.setTextColor(0, 77, 153);
-    doc.text('AUTORIZACIÓN DE CIRCULACIÓN', 105, 25, { align: 'center' });
-
-    // Número de documento
-    doc.setFontSize(10);
-    doc.setTextColor(0, 0, 0);
-    doc.text('No. ACT-EP-DPOTTM-016-2025-ACVIL', 105, 35, { align: 'center' });
+    doc.setTextColor(0, 77, 153); // Azul
+    doc.text('AUTORIZACIÓN', 105, 25, { align: 'center' });
 
     // Línea separadora
-    doc.line(20, 45, 190, 45);
+    doc.line(20, 35, 190, 35);
 
-    // Mensaje principal
+    // Resto del contenido en negro
+    doc.setTextColor(0, 0, 0); // Negro
+
+    // Determinar qué mostrar en cédula/RUC
+    let identificacion = '';
+    if (currentData.cedula && currentData.ruc) {
+        identificacion = `cédula ${currentData.cedula} / RUC ${currentData.ruc}`;
+    } else if (currentData.cedula) {
+        identificacion = `cédula ${currentData.cedula}`;
+    } else if (currentData.ruc) {
+        identificacion = `RUC ${currentData.ruc}`;
+    } else {
+        identificacion = 'No disponible';
+    }
+
+    // Mensaje principal - justificado (formando un bloque rectangular)
     doc.setFontSize(12);
-    const mensaje = `Estimado/a ${currentData.nombre} ${currentData.apellido} con la cédula ${currentData.cedula}, este mensaje es para indicarle que queda autorizada su placa ${currentData.placa} desde la Autoridad de Control de Tránsito (ACT).`;
-
-    const lines = doc.splitTextToSize(mensaje, 150);
-    doc.text(lines, 20, 60);
+    
+    const mensaje = `Estimado/a ${currentData.nombre} con la ${identificacion}, este mensaje es para indicarle que se ha emitido la autorización correspondiente desde la Autoridad de Control de Tránsito Milagro (ACT).`;
+    
+    // Configurar para texto justificado
+    const margin = 20;
+    const maxWidth = 170; // Ancho máximo para el bloque de texto
+    
+    // Dividir el texto en líneas justificadas
+    const lines = doc.splitTextToSize(mensaje, maxWidth);
+    
+    // Posición inicial Y
+    let y = 50;
+    
+    // Dibujar cada línea alineada a la izquierda (pero el texto dentro de cada línea está justificado)
+    lines.forEach((line, index) => {
+        doc.text(line, margin, y + (index * 7));
+    });
 
     // Detalles de la autorización
-    let y = 85;
+    let detailsY = y + (lines.length * 7) + 15;
     doc.setFontSize(11);
     doc.setFont("helvetica", "bold");
-    doc.text('DETALLES DE LA AUTORIZACIÓN:', 20, y);
+    doc.text('DETALLES DE LA AUTORIZACIÓN:', 20, detailsY);
 
-    y += 10;
+    detailsY += 10;
     doc.setFont("helvetica", "normal");
-    doc.text(`• Placa: ${currentData.placa}`, 25, y);
-    y += 8;
-    doc.text(`• Nombres: ${currentData.nombre}`, 25, y);
-    y += 8;
-    doc.text(`• Apellidos: ${currentData.apellido}`, 25, y);
-    y += 8;
-    doc.text(`• Cédula: ${currentData.cedula}`, 25, y);
-    y += 8;
-    doc.text('• Validez: 1 al 30 de septiembre de 2025', 25, y);
-    y += 8;
-    doc.text('• Horario: 14:00 a 23:00', 25, y);
-
-    y += 15;
-    doc.setFont("helvetica", "bold");
-    doc.text('RUTA AUTORIZADA:', 20, y);
-    y += 8;
-    doc.setFont("helvetica", "normal");
-    const ruta = 'Av. Galo Plaza Lasso → Av. Cristóbal Colón (derecha) → Av. Julio Arosemena Monroy/Babahoyo → Av. Galo Plaza Lasso';
-    const rutaLines = doc.splitTextToSize(ruta, 150);
-    doc.text(rutaLines, 25, y);
-
-    y += rutaLines.length * 6 + 10;
-    doc.setFont("helvetica", "bold");
-    doc.text('REPRESENTANTE:', 20, y);
-    y += 8;
-    doc.setFont("helvetica", "normal");
-    doc.text('Marco Ramiro Vargas Tixe', 25, y);
-
-    // Condiciones
-    y += 15;
-    doc.setFont("helvetica", "bold");
-    doc.text('CONDICIONES:', 20, y);
-    y += 8;
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(9);
-    const condiciones = 'Los conductores deberán portar la autorización. Sanciones según Ordenanza GADMM #38-2023 y #40-2023.';
-    const condicionesLines = doc.splitTextToSize(condiciones, 150);
-    doc.text(condicionesLines, 25, y);
+    // Número de autorización como primer dato en los detalles
+    doc.text(`• Número de Autorización: ${currentData.autorizacion}`, 25, detailsY);
+    detailsY += 8;
+    doc.text(`• Placa: ${currentData.placa}`, 25, detailsY);
+    detailsY += 8;
+    doc.text(`• Nombres: ${currentData.nombre}`, 25, detailsY);
+    detailsY += 8;
+    doc.text(`• Cédula: ${currentData.cedula || 'No disponible'}`, 25, detailsY);
+    detailsY += 8;
+    doc.text(`• RUC: ${currentData.ruc || 'No disponible'}`, 25, detailsY);
+    detailsY += 8;
+    doc.text(`• Vigencia: ${currentData.caducidad}`, 25, detailsY);
 
     // Pie de página
     doc.line(20, 260, 190, 260);
     doc.setFontSize(8);
-    doc.text('EMOVIM-EP | Av. Simón Bolívar y Juan Montalvo | Milagro, Ecuador', 105, 270, { align: 'center' });
-    doc.text('genercia@emovim-ep.gob.ec', 105, 275, { align: 'center' });
+    doc.text('Emovip EP Ecuador', 105, 270, { align: 'center' });
+    doc.text('gerencia@act.gob.ec', 105, 275, { align: 'center' });
 
     // Fecha actual
     const now = new Date();
     doc.text(`Fecha de emisión: ${now.toLocaleDateString('es-EC')} ${now.toLocaleTimeString('es-EC')}`, 105, 285, { align: 'center' });
 
     // Descargar PDF
-    doc.save(`Autorizacion_${currentData.placa}_${currentData.nombre}_${currentData.apellido}.pdf`);
+    doc.save(`Autorizacion_${currentData.placa}_${currentData.nombre}.pdf`);
 }
 
 // Mostrar detalles si se accede con parámetros de URL (cuando se escanea el QR)
 window.onload = function () {
     const urlParams = new URLSearchParams(window.location.search);
-    const placa = urlParams.get('placa');
-    const nombre = urlParams.get('nombre');
-    const apellido = urlParams.get('apellido');
-    const cedula = urlParams.get('cedula');
-    const ruc = urlParams.get('ruc');
-    const autorizacion = urlParams.get('autorizacion');
-    const caducidad = urlParams.get('caducidad');
+    const placa = urlParams.get('p') || urlParams.get('placa'); // Compatible con viejo y nuevo
+    const nombre = urlParams.get('n') || urlParams.get('nombre');
+    const cedula = urlParams.get('ci') || urlParams.get('cedula');
+    const ruc = urlParams.get('r') || urlParams.get('ruc');
+    const autorizacion = urlParams.get('a') || urlParams.get('autorizacion');
+    const caducidad = urlParams.get('c') || urlParams.get('caducidad');
 
-    if (placa && nombre && apellido && cedula && ruc && autorizacion && caducidad) {
-        // Configurar datos para vista de QR escaneado
-        currentData = { placa, nombre, apellido, cedula, ruc, autorizacion, caducidad };
+    // Mostrar detalles si hay placa, nombre, autorizacion, caducidad y al menos uno de cedula o ruc
+    if (
+        placa && nombre && autorizacion && caducidad &&
+        (cedula || ruc)
+    ) {
+        currentData = { placa, nombre, cedula, ruc, autorizacion, caducidad };
         currentPlaca = placa;
 
-        // Mostrar solo los detalles y el botón para PDF
         document.getElementById('input-section').style.display = 'none';
         document.getElementById('auth-details').style.display = 'block';
         document.getElementById('qr-container').style.display = 'none';
 
-        // Llenar los datos en la vista
         document.getElementById('auth-placa').textContent = placa;
         document.getElementById('auth-nombre').textContent = nombre;
-        document.getElementById('auth-apellido').textContent = apellido;
-        document.getElementById('auth-cedula').textContent = cedula;
-        document.getElementById('auth-ruc').textContent = ruc;
+        document.getElementById('auth-cedula').textContent = cedula || 'No disponible';
+        document.getElementById('auth-ruc').textContent = ruc || 'No disponible';
         document.getElementById('auth-autorizacion').textContent = autorizacion;
         document.getElementById('auth-caducidad').textContent = caducidad;
 
         document.getElementById('result-message').textContent = `✅ Autorización válida para placa: ${placa}`;
         document.getElementById('result-message').className = 'success';
     }
+
+    // Establecer fecha mínima como hoy en el input de fecha
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('caducidad-input').min = today;
 
     // Actualizar fecha actual en el footer
     const now = new Date();
